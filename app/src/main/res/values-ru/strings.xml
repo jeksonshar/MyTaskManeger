@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Менеджер задач</string>
+    <string name="add_task">addTask</string>
+    <string name="title">Заголовок задачи</string>
+    <string name="enter_a_title_for_the_task">Введите заголовок задачи</string>
+    <string name="details">Описание задачи</string>
+    <string name="enter_a_details_for_the_task">Введите описание задачи</string>
+    <string name="task_deadline">Срок выполнения задачи</string>
+    <string name="change_date">Изменить дату</string>
+    <string name="change_time">Изменить время</string>
+    <string name="task_solved">Задача выполнена</string>
+    <string name="at">в</string>
+    <string name="delete">Удалить</string>
+    <string name="are_you_sure_to_delete">Вы уверены, что хотите удалить эту задачу?</string>
+    <string name="save">Сохранить</string>
+
+</resources>
