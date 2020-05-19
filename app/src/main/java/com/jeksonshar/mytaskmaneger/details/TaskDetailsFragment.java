@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,7 +40,6 @@ public class TaskDetailsFragment extends Fragment {
     private Task mTask;
 
     private Repository mRepository;
-    private Calendar dateAndTime = Calendar.getInstance();
 
     // View
     private EditText titleView;
@@ -125,24 +123,31 @@ public class TaskDetailsFragment extends Fragment {
             }
         });
 
+        dateOfTaskView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeDate();
+            }
+        });
+
         changeDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(getContext(), date,
-                        mTask.getDateAndTime().get(Calendar.YEAR),
-                        mTask.getDateAndTime().get(Calendar.MONTH),
-                        mTask.getDateAndTime().get(Calendar.DAY_OF_MONTH))
-                        .show();
+                changeDate();
+            }
+        });
+
+        timeOfTaskView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeTime();
             }
         });
 
         changeTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TimePickerDialog(getContext(), time,
-                        mTask.getDateAndTime().get(Calendar.HOUR_OF_DAY),
-                        mTask.getDateAndTime().get(Calendar.MINUTE), true)
-                        .show();
+                changeTime();
             }
         });
 
@@ -178,14 +183,31 @@ public class TaskDetailsFragment extends Fragment {
         }
     }
 
+    private void changeDate() {
+        new DatePickerDialog(getContext(), date,
+                mTask.getDateAndTime().get(Calendar.YEAR),
+                mTask.getDateAndTime().get(Calendar.MONTH),
+                mTask.getDateAndTime().get(Calendar.DAY_OF_MONTH))
+                .show();
+    }
+
+    private void changeTime() {
+        new TimePickerDialog(getContext(), time,
+                mTask.getDateAndTime().get(Calendar.HOUR_OF_DAY),
+                mTask.getDateAndTime().get(Calendar.MINUTE), true)
+                .show();
+    }
+
     private void setInitialDateTime() {
-//   first variant of string formatting
-/*        dateOfTaskView.setText(DateUtils.formatDateTime(getContext(),
+/*   first variant of string formatting
+
+        dateOfTaskView.setText(DateUtils.formatDateTime(getContext(),
                 mTask.getDateAndTime().getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
         timeOfTaskView.setText(DateUtils.formatDateTime(getContext(),
                 mTask.getDateAndTime().getTimeInMillis(),
-                DateUtils.FORMAT_SHOW_TIME));*/
+                DateUtils.FORMAT_SHOW_TIME));
+*/
 
 //   second variant of string formatting
         SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -195,6 +217,7 @@ public class TaskDetailsFragment extends Fragment {
                 "HH:mm", Locale.getDefault());
         timeOfTaskView.setText(timeFormat.format(mTask.getDateAndTime().getTime()));
         solvedView.setChecked(mTask.getSolved());
+        saveTask();
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {

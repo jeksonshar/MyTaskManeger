@@ -9,6 +9,7 @@ import java.util.UUID;
 public class InMemoryRepository extends BaseRepository {
 
     private final List<Task> mTaskList = new ArrayList<>();
+
     @Override
     public List<Task> getAllTasks() {
         return mTaskList;
@@ -41,9 +42,4 @@ public class InMemoryRepository extends BaseRepository {
     public void update(Task task) {
         notifyListeners();
     }
-
-//    public static Task getNewTask() {
-//        Task task = new Task();
-//        return task;
-//    }
 }

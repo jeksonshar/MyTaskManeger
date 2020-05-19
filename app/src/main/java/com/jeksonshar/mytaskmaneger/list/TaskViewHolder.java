@@ -31,9 +31,18 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         dateAndTime = itemView.findViewById(R.id.item_date_and_time);
         solvedView = itemView.findViewById(R.id.item_solved);
 
+//      ??? работает только с InMemoryRepository
+        solvedView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentTask.setSolved(solvedView.isChecked());
+            }
+        });                                                             //
+
         itemView.setOnClickListener(itemClickListener);
         itemView.setOnLongClickListener(itemLongClickListener);
     }
+
 
     private final View.OnClickListener itemClickListener = new View.OnClickListener() {
         @Override
@@ -50,20 +59,15 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         }
     };
 
-    public void bindTo(Task task) {
+
+    public void bindTo(final Task task) {
         this.currentTask = task;
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "EEEE, d MMMM yyyy; HH:mm", Locale.getDefault());
 
         titleView.setText(task.getTitle());
-        dateAndTime.setText(dateFormat.format(task.getDateAndTime().getTime()));
         solvedView.setChecked(task.getSolved());
 
-        solvedView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentTask.setSolved(solvedView.isChecked());
-            }
-        });
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "EEEE, d MMMM yyyy; HH:mm", Locale.getDefault());
+        dateAndTime.setText(dateFormat.format(task.getDateAndTime().getTime()));
     }
 }

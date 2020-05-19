@@ -68,7 +68,8 @@ public class TaskListFragment extends Fragment {
             public void onClick(View v) {
                 if (v.getId() == R.id.imageButton) {
                     FragmentTransaction transaction = getParentFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentContainer, TaskDetailsFragment.makeInstance(mRepository.addNewTask()));
+                            .replace(R.id.fragmentContainer,
+                                    TaskDetailsFragment.makeInstance(mRepository.addNewTask()));
                     transaction = transaction.addToBackStack(null);
                     transaction.commit();
                 }
@@ -98,6 +99,8 @@ public class TaskListFragment extends Fragment {
     private final TaskListAdapter.ItemEventsListener mItemEventsListener = new TaskListAdapter.ItemEventsListener() {
         @Override
         public void onItemClick(Task task) {
+//   без этой строки чекбокс установленный в списке не записывается в задачу с RoomRepository(context)
+            mRepository.update(task);
 
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, TaskDetailsFragment.makeInstance(task.getId()));

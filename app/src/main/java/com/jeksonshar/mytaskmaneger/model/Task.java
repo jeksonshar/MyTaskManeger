@@ -1,8 +1,5 @@
 package com.jeksonshar.mytaskmaneger.model;
 
-import android.content.res.Resources;
-import android.text.format.DateUtils;
-
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -24,8 +21,15 @@ public class Task {
         return id;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public Calendar getDateAndTime() {
         return dateAndTime;
+    }
+    public void setDateAndTime(Calendar calendar) {
+        this.dateAndTime = calendar;
     }
 
     public String getTitle() {
