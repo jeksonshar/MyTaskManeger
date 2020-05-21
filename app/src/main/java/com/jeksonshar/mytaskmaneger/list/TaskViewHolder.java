@@ -34,7 +34,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         solvedView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentTask.setSolved(solvedView.isChecked()); // изменяем значение чекбокса
+                currentTask.setSolved(solvedView.isChecked());  // изменяем значение чекбокса
                 listener.onSolvedClick(currentTask);            // сохраняем его в задаче
             }
         });

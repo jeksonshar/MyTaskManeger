@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +22,9 @@ import com.jeksonshar.mytaskmaneger.model.Task;
 import com.jeksonshar.mytaskmaneger.repository.Repository;
 import com.jeksonshar.mytaskmaneger.repository.RepositoryProvider;
 
+import java.util.Collections;
+import java.util.List;
+
 public class TaskListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -32,6 +34,7 @@ public class TaskListFragment extends Fragment {
     private Repository mRepository;
 
     private static boolean hiding;
+    private static boolean sortByDeadline;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,12 +66,25 @@ public class TaskListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        List<Task> taskList;
         if (getHiding()) {
-            mTaskListAdapter = new TaskListAdapter(RepositoryProvider.getInstance(getContext()).getUnsolvedTasks(),mItemEventsListener);
+            taskList = RepositoryProvider.getInstance(getContext()).getUnsolvedTasks();
+            if (getSortByDeadline()) {
+                Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+            } else {
+                Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+            }
         } else {
-            mTaskListAdapter = new TaskListAdapter(
-                    RepositoryProvider.getInstance(getContext()).getAllTasks(), mItemEventsListener
-            );
+            taskList = RepositoryProvider.getInstance(getContext()).getAllTasks();
+            if (getSortByDeadline()) {
+                Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+            } else {
+                Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+            }
         }
 
         mRecyclerView.setAdapter(mTaskListAdapter);
@@ -101,11 +117,11 @@ public class TaskListFragment extends Fragment {
             setHiding(false);
             onActivityCreated(getArguments());
         } else if (item.getItemId() == R.id.sorted_by_deadline) {
-            Toast.makeText(getContext(), "Sorted by deadline...", Toast.LENGTH_LONG).show();
-            //TODO
+            setSortByDeadline(true);
+            onActivityCreated(getArguments());
         } else if (item.getItemId() == R.id.sorted_by_creation_date) {
-            Toast.makeText(getContext(), "Sorted by created date...", Toast.LENGTH_LONG).show();
-            //TODO
+            setSortByDeadline(false);
+            onActivityCreated(getArguments());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,12 +138,20 @@ public class TaskListFragment extends Fragment {
         super.onPause();
     }
 
-    public static boolean getHiding() {
+    private static boolean getHiding() {
         return hiding;
     }
 
-    public void setHiding(boolean hiding) {
+    private void setHiding(boolean hiding) {
         TaskListFragment.hiding = hiding;
+    }
+
+    private static boolean getSortByDeadline() {
+        return sortByDeadline;
+    }
+
+    private static void setSortByDeadline(boolean sortByDeadline) {
+        TaskListFragment.sortByDeadline = sortByDeadline;
     }
 
     private final Repository.Listener repositoryListener = new Repository.Listener() {
@@ -137,7 +161,8 @@ public class TaskListFragment extends Fragment {
         }
     };
 
-    private final TaskListAdapter.ItemEventsListener mItemEventsListener = new TaskListAdapter.ItemEventsListener() {
+    private final TaskListAdapter.ItemEventsListener mItemEventsListener =
+            new TaskListAdapter.ItemEventsListener() {
         @Override
         public void onSolvedClick(Task task) { // обновление задачи при нажатии чекбокса из списка
             mRepository.update(task);
