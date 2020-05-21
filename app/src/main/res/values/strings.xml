@@ -13,5 +13,9 @@
     <string name="delete">Delete</string>
     <string name="are_you_sure_to_delete">Are you sure you want to delete this item?</string>
     <string name="save">Save</string>
+    <string name="hide_solved">Hide solved tasks</string>
+    <string name="un_hide_solved">Show all tasks</string>
+    <string name="sorted_by_deadline">Sorted list by deadline</string>
+    <string name="sorted_by_creation_date">Sorted by creation date</string>
 
 </resources>

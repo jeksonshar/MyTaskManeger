@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".list.TaskListActivity">
+
+    <item
+        android:id="@+id/hide_solved"
+        android:orderInCategory="100"
+        android:title="@string/hide_solved"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/un_hide"
+        android:orderInCategory="100"
+        android:title="@string/un_hide_solved"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/sorted_by_deadline"
+        android:orderInCategory="100"
+        android:title="@string/sorted_by_deadline"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/sorted_by_creation_date"
+        android:orderInCategory="100"
+        android:title="@string/sorted_by_creation_date"
+        app:showAsAction="never"/>
+</menu>

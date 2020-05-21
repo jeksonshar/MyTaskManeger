@@ -12,33 +12,37 @@
         android:orientation="vertical">
 
         <TextView
-            style="?android:listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/title"/>
 
         <EditText
             android:id="@+id/task_title_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_stile"
+            android:padding="5dp"
             android:hint="@string/enter_a_title_for_the_task"/>
 
         <TextView
-            style="?android:listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/details"/>
 
         <EditText
             android:id="@+id/task_details_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_stile"
+            android:padding="5dp"
             android:hint="@string/enter_a_details_for_the_task"/>
 
         <TextView
-            style="?android:listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/task_deadline"/>
 
         <LinearLayout
@@ -52,6 +56,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/edit_text_stile"
+                android:padding="10dp"
                 tools:text="May 21, 2019"/>
 
             <Button
@@ -73,6 +79,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/edit_text_stile"
+                android:padding="10dp"
                 tools:text="20:00"/>
 
             <Button

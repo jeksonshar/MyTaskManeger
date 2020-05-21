@@ -14,5 +14,9 @@
     <string name="delete">Удалить</string>
     <string name="are_you_sure_to_delete">Вы уверены, что хотите удалить эту задачу?</string>
     <string name="save">Сохранить</string>
+    <string name="hide_solved">Скрыть выполненные задачи</string>
+    <string name="un_hide_solved">Показать все задачи</string>
+    <string name="sorted_by_deadline">Сортировка по сроку выполнения</string>
+    <string name="sorted_by_creation_date">Сортировка по дате внесения</string>
 
 </resources>

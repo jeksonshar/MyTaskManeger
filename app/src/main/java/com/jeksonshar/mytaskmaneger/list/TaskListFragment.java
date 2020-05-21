@@ -2,9 +2,13 @@ package com.jeksonshar.mytaskmaneger.list;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,6 +79,29 @@ public class TaskListFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.task_list_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.hide_solved) {
+            Toast.makeText(getContext(), "Hide...", Toast.LENGTH_LONG).show();
+            //TODO
+        } else if (item.getItemId() == R.id.un_hide) {
+            Toast.makeText(getContext(), "Unhide all...", Toast.LENGTH_LONG).show();
+            //TODO
+        } else if (item.getItemId() == R.id.sorted_by_deadline) {
+            Toast.makeText(getContext(), "Sorted by deadline...", Toast.LENGTH_LONG).show();
+            //TODO
+        } else if (item.getItemId() == R.id.sorted_by_creation_date) {
+            Toast.makeText(getContext(), "Sorted by created date...", Toast.LENGTH_LONG).show();
+            //TODO
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
