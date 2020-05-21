@@ -22,7 +22,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     private Task currentTask;
     private final TaskListAdapter.ItemEventsListener listener;
 
-    public TaskViewHolder(@NonNull View itemView, TaskListAdapter.ItemEventsListener listener) {
+    public TaskViewHolder(@NonNull View itemView, final TaskListAdapter.ItemEventsListener listener) {
         super(itemView);
 
         this.listener = listener;
@@ -31,13 +31,13 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
         dateAndTime = itemView.findViewById(R.id.item_date_and_time);
         solvedView = itemView.findViewById(R.id.item_solved);
 
-//      ??? работает только с InMemoryRepository
         solvedView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentTask.setSolved(solvedView.isChecked());
+                currentTask.setSolved(solvedView.isChecked()); // изменяем значение чекбокса
+                listener.onSolvedClick(currentTask);            // сохраняем его в задаче
             }
-        });                                                             //
+        });
 
         itemView.setOnClickListener(itemClickListener);
         itemView.setOnLongClickListener(itemLongClickListener);

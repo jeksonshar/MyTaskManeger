@@ -31,6 +31,8 @@ public class TaskListFragment extends Fragment {
 
     private Repository mRepository;
 
+    private static boolean hiding;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +63,13 @@ public class TaskListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mTaskListAdapter = new TaskListAdapter(
-                RepositoryProvider.getInstance(getContext()).getAllTasks(), mItemEventsListener
-        );
+        if (getHiding()) {
+            mTaskListAdapter = new TaskListAdapter(RepositoryProvider.getInstance(getContext()).getUnsolvedTasks(),mItemEventsListener);
+        } else {
+            mTaskListAdapter = new TaskListAdapter(
+                    RepositoryProvider.getInstance(getContext()).getAllTasks(), mItemEventsListener
+            );
+        }
 
         mRecyclerView.setAdapter(mTaskListAdapter);
 
@@ -89,11 +95,11 @@ public class TaskListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.hide_solved) {
-            Toast.makeText(getContext(), "Hide...", Toast.LENGTH_LONG).show();
-            //TODO
+            setHiding(true);
+            onActivityCreated(getArguments());
         } else if (item.getItemId() == R.id.un_hide) {
-            Toast.makeText(getContext(), "Unhide all...", Toast.LENGTH_LONG).show();
-            //TODO
+            setHiding(false);
+            onActivityCreated(getArguments());
         } else if (item.getItemId() == R.id.sorted_by_deadline) {
             Toast.makeText(getContext(), "Sorted by deadline...", Toast.LENGTH_LONG).show();
             //TODO
@@ -116,6 +122,14 @@ public class TaskListFragment extends Fragment {
         super.onPause();
     }
 
+    public static boolean getHiding() {
+        return hiding;
+    }
+
+    public void setHiding(boolean hiding) {
+        TaskListFragment.hiding = hiding;
+    }
+
     private final Repository.Listener repositoryListener = new Repository.Listener() {
         @Override
         public void onDataChanged() {
@@ -125,9 +139,12 @@ public class TaskListFragment extends Fragment {
 
     private final TaskListAdapter.ItemEventsListener mItemEventsListener = new TaskListAdapter.ItemEventsListener() {
         @Override
-        public void onItemClick(Task task) {
-//   без этой строки чекбокс установленный в списке не записывается в задачу с RoomRepository(context)
+        public void onSolvedClick(Task task) { // обновление задачи при нажатии чекбокса из списка
             mRepository.update(task);
+        }
+
+        @Override
+        public void onItemClick(Task task) {
 
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, TaskDetailsFragment.makeInstance(task.getId()));

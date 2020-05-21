@@ -48,6 +48,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     }
 
     interface ItemEventsListener {
+        void onSolvedClick(Task task); // обновление задачи при нажатии чекбокса из списка
         void onItemClick(Task task);
         void onLongItemClick(Task task);
     }

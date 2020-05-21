@@ -28,6 +28,7 @@ public class Task {
     public Calendar getDateAndTime() {
         return dateAndTime;
     }
+
     public void setDateAndTime(Calendar calendar) {
         this.dateAndTime = calendar;
     }

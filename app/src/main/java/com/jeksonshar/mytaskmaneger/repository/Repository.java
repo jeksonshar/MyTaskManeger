@@ -9,6 +9,8 @@ public interface Repository {
 
     List<Task> getAllTasks();
 
+    List<Task> getUnsolvedTasks();
+
     Task getTaskById(UUID uuid);
 
     UUID addNewTask();

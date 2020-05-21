@@ -16,6 +16,11 @@ public class InMemoryRepository extends BaseRepository {
     }
 
     @Override
+    public List<Task> getUnsolvedTasks() {
+        return mTaskList;
+    }
+
+    @Override
     public Task getTaskById(UUID uuid) {
         for (Task task: mTaskList) {
             if (task.getId().equals(uuid)) {

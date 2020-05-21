@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class RoomRepository extends BaseRepository {
 
-    TasksDao mTasksDao;
+    private TasksDao mTasksDao;
 
     public RoomRepository(Context context) {
         mTasksDao = Room
@@ -30,6 +30,19 @@ public class RoomRepository extends BaseRepository {
 
         for (TaskEntity taskEntity: taskEntities) {
             resultList.add(Converter.convert(taskEntity));
+        }
+        return resultList;
+    }
+
+    @Override
+    public List<Task> getUnsolvedTasks() {
+        List<TaskEntity> taskEntities = mTasksDao.getAllTasks();
+        List<Task> resultList = new ArrayList<>();
+
+        for (TaskEntity taskEntity: taskEntities) {
+            if (!Converter.convert(taskEntity).getSolved()) {
+                resultList.add(Converter.convert(taskEntity));
+            }
         }
         return resultList;
     }
