@@ -29,6 +29,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         notifyDataSetChanged();
     }
 
+//   без переопределения этого метода список при скроллинге формируется иногда беспорядочно
+    @Override
+    public long getItemId(int position) {
+        return mTaskList.get(position).getId().hashCode();
+    }
+
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
