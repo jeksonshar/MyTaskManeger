@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Менеджер задач</string>
+    <string name="app_name">Задачи</string>
     <string name="add_task">addTask</string>
     <string name="title">Заголовок задачи</string>
     <string name="enter_a_title_for_the_task">Введите заголовок задачи</string>
