@@ -68,7 +68,7 @@ public class TaskListFragment extends Fragment {
 
         List<Task> taskList;
         if (getHiding()) {
-            taskList = RepositoryProvider.getInstance(getContext()).getUnsolvedTasks();
+            taskList = mRepository.getUnsolvedTasks();
             if (getSortByDeadline()) {
                 Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
                 mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
@@ -77,7 +77,7 @@ public class TaskListFragment extends Fragment {
                 mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
             }
         } else {
-            taskList = RepositoryProvider.getInstance(getContext()).getAllTasks();
+            taskList = mRepository.getAllTasks();
             if (getSortByDeadline()) {
                 Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
                 mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
@@ -157,7 +157,26 @@ public class TaskListFragment extends Fragment {
     private final Repository.Listener repositoryListener = new Repository.Listener() {
         @Override
         public void onDataChanged() {
-            mTaskListAdapter.setNewTasks(mRepository.getAllTasks());
+            List<Task> taskList;
+            if (getHiding()) {
+                taskList = mRepository.getUnsolvedTasks();
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter.setNewTasks(taskList);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter.setNewTasks(taskList);
+                }
+            } else {
+                taskList = mRepository.getAllTasks();
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter.setNewTasks(taskList);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter.setNewTasks(taskList);
+                }
+            }
         }
     };
 
