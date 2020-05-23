@@ -18,5 +18,9 @@
     <string name="un_hide_solved">Показать все задачи</string>
     <string name="sorted_by_deadline">Сортировка по сроку выполнения</string>
     <string name="sorted_by_creation_date">Сортировка по дате внесения</string>
+    <string name="all_tasks">Все задачи</string>
+    <string name="red_tasks">Red tasks</string>
+    <string name="green_tasks">Green tasks</string>
+    <string name="yellow_tasks">Yellow tasks</string>
 
 </resources>

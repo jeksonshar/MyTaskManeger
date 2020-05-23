@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:layout_gravity="bottom"
             android:text="@string/title"/>
 
         <EditText
@@ -29,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:layout_gravity="bottom"
             android:text="@string/details"/>
 
         <EditText
@@ -43,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:layout_gravity="bottom"
             android:text="@string/task_deadline"/>
 
         <LinearLayout

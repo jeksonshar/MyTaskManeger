@@ -17,5 +17,9 @@
     <string name="un_hide_solved">Show all tasks</string>
     <string name="sorted_by_deadline">Sorted list by deadline</string>
     <string name="sorted_by_creation_date">Sorted by creation date</string>
+    <string name="all_tasks">All tasks</string>
+    <string name="red_tasks">Red tasks</string>
+    <string name="green_tasks">Green tasks</string>
+    <string name="yellow_tasks">Yellow tasks</string>
 
 </resources>

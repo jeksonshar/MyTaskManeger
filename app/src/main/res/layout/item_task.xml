@@ -36,12 +36,18 @@
             tools:text="Date and time"/>
 
         <View
-            android:id="@+id/view1"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/darker_gray" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/task_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_brightness_yellow_slow_16dp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

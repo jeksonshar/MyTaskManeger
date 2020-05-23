@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/all_tasks"
+        android:title="@string/all_tasks" />
+    <item
+        android:id="@+id/red_tasks"
+        android:icon="@drawable/ic_brightness_red_24dp"
+        android:title="@string/red_tasks" />
+    <item
+        android:id="@+id/green_tasks"
+        android:icon="@drawable/ic_brightness_green_24dp"
+        android:title="@string/green_tasks" />
+    <item
+        android:id="@+id/yellow_tasks"
+        android:icon="@drawable/ic_brightness_yellow_24dp"
+        android:title="@string/yellow_tasks" />
+</menu>
