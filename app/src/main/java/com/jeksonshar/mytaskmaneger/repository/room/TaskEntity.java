@@ -14,4 +14,5 @@ public class TaskEntity {
     public String detail;
     public long dateAndTime;
     public boolean solved;
+    public String priority;
 }

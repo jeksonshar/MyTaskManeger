@@ -16,6 +16,7 @@ public class Converter {
         taskEntity.detail = task.getDetail();
         taskEntity.dateAndTime = task.getDateAndTime().getTimeInMillis();
         taskEntity.solved = task.getSolved();
+        taskEntity.priority = task.getPriority();
 
         return taskEntity;
     }
@@ -35,6 +36,7 @@ public class Converter {
             task.setDateAndTime(cal);
 
             task.setSolved(taskEntity.solved);
+            task.setPriority(taskEntity.priority);
         }
         return task;
     }

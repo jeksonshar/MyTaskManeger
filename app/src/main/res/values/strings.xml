@@ -18,8 +18,9 @@
     <string name="sorted_by_deadline">Sorted list by deadline</string>
     <string name="sorted_by_creation_date">Sorted by creation date</string>
     <string name="all_tasks">All tasks</string>
-    <string name="red_tasks">Red tasks</string>
-    <string name="green_tasks">Green tasks</string>
-    <string name="yellow_tasks">Yellow tasks</string>
+    <string name="red_priority">Red priority</string>
+    <string name="green_priority">Green priority</string>
+    <string name="yellow_priority">Yellow priority</string>
+    <string name="change_priority">Change priority</string>
 
 </resources>

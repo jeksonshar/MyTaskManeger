@@ -17,7 +17,7 @@ public class RoomRepository extends BaseRepository {
 
     public RoomRepository(Context context) {
         mTasksDao = Room
-                .databaseBuilder(context, TasksDataBase.class, "task-database.sqLite")
+                .databaseBuilder(context, TasksDataBase.class, "task-database2.sqLite")
                 .allowMainThreadQueries()
                 .build()
                 .getTasksDao();

@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -23,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.jeksonshar.mytaskmaneger.R;
 import com.jeksonshar.mytaskmaneger.model.Task;
+import com.jeksonshar.mytaskmaneger.model.TaskPriorityValue;
 import com.jeksonshar.mytaskmaneger.repository.Repository;
 import com.jeksonshar.mytaskmaneger.repository.RepositoryProvider;
 
@@ -49,6 +52,8 @@ public class TaskDetailsFragment extends Fragment {
     private Button changeDateButton;
     private Button changeTimeButton;
     private CheckBox solvedView;
+    private ImageView taskPriority;
+    private TextView changePriorityView;
     private Button save;
 
     public TaskDetailsFragment() {
@@ -78,7 +83,12 @@ public class TaskDetailsFragment extends Fragment {
         changeDateButton = view.findViewById(R.id.change_date_button);
         changeTimeButton = view.findViewById(R.id.change_time_button);
         solvedView = view.findViewById(R.id.task_solved);
+        changePriorityView = view.findViewById(R.id.change_priority_view);
+        taskPriority = view.findViewById(R.id.task_priority);
         save = view.findViewById(R.id.save);
+
+        registerForContextMenu(changePriorityView);
+        registerForContextMenu(taskPriority);
     }
 
     @Override
@@ -87,12 +97,20 @@ public class TaskDetailsFragment extends Fragment {
 
         titleView.setText(mTask.getTitle());
         detailView.setText(mTask.getDetail());
+
+        if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.GREEN))) {
+            taskPriority.setImageResource(R.drawable.ic_brightness_green_24dp);
+        } else if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.RED))) {
+            taskPriority.setImageResource(R.drawable.ic_brightness_red_24dp);
+        } else if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.YELLOW))) {
+            taskPriority.setImageResource(R.drawable.ic_brightness_yellow_24dp);
+        }
+
         setInitialDateTime();
 
         titleView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -103,7 +121,6 @@ public class TaskDetailsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -159,6 +176,20 @@ public class TaskDetailsFragment extends Fragment {
             }
         });
 
+        changePriorityView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopUpMenu(v);
+            }
+        });
+
+        taskPriority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopUpMenu(v);
+            }
+        });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +212,37 @@ public class TaskDetailsFragment extends Fragment {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void showPopUpMenu(View v) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), v);
+            popupMenu.inflate(R.menu.menu_priority_menu);
+
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.green_priority:
+                            mTask.setPriority(String.valueOf(TaskPriorityValue.GREEN));
+                            saveTask();
+                            onActivityCreated(getArguments());
+                            return true;
+                        case R.id.red_priority:
+                            mTask.setPriority(String.valueOf(TaskPriorityValue.RED));
+                            saveTask();
+                            onActivityCreated(getArguments());
+                            return true;
+                        case R.id.yellow_priority:
+                            mTask.setPriority(String.valueOf(TaskPriorityValue.YELLOW));
+                            saveTask();
+                            onActivityCreated(getArguments());
+                            return true;
+                    }
+                    onCreate(getArguments());
+                   return false;
+                }
+            });
+            popupMenu.show();
     }
 
     private void changeDate() {

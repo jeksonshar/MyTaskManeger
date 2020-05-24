@@ -12,12 +12,14 @@ public class Task {
     private String title;
     private String detail;
     private boolean solved;
+    private String priority;
 
     public Task() {
         this.id  = UUID.randomUUID();
         this.dateCreated = Calendar.getInstance();
         this.dateAndTime = Calendar.getInstance();
         this.dateAndTime.add(Calendar.HOUR_OF_DAY, 3);
+        this.priority = String.valueOf(TaskPriorityValue.GREEN);
     }
 
     public UUID getId() {
@@ -62,6 +64,14 @@ public class Task {
 
     public void setSolved(boolean solved) {
         this.solved = solved;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     public static final Comparator<Task> COMPARE_BY_DEADLINE = new Comparator<Task>() {
