@@ -11,6 +11,12 @@ public interface Repository {
 
     List<Task> getUnsolvedTasks();
 
+    List<Task> getRedPriorityTasks();
+
+    List<Task> getGreenPriorityTasks();
+
+    List<Task> getYellowPriorityTasks();
+
     Task getTaskById(UUID uuid);
 
     UUID addNewTask();

@@ -1,10 +1,13 @@
 package com.jeksonshar.mytaskmaneger.repository.room;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.room.Room;
 
+import com.jeksonshar.mytaskmaneger.list.TaskListPriorityChoose;
 import com.jeksonshar.mytaskmaneger.model.Task;
+import com.jeksonshar.mytaskmaneger.model.TaskPriorityValue;
 import com.jeksonshar.mytaskmaneger.repository.BaseRepository;
 
 import java.util.ArrayList;
@@ -46,6 +49,49 @@ public class RoomRepository extends BaseRepository {
         }
         return resultList;
     }
+
+    @Override
+    public List<Task> getRedPriorityTasks() {
+        List<TaskEntity> taskEntities = mTasksDao.getAllTasks();
+        List<Task> resultList = new ArrayList<>();
+
+        for (TaskEntity taskEntity: taskEntities) {
+            String a = Converter.convert(taskEntity).getPriority();
+            if (a.equals(String.valueOf(TaskPriorityValue.RED))) {
+                resultList.add(Converter.convert(taskEntity));
+            }
+        }
+        return resultList;
+    }
+
+    @Override
+    public List<Task> getGreenPriorityTasks() {
+        List<TaskEntity> taskEntities = mTasksDao.getAllTasks();
+        List<Task> resultList = new ArrayList<>();
+
+        for (TaskEntity taskEntity: taskEntities) {
+            if (Converter.convert(taskEntity).getPriority()
+                    .equals(String.valueOf(TaskPriorityValue.GREEN))) {
+                resultList.add(Converter.convert(taskEntity));
+            }
+        }
+        return resultList;
+    }
+
+    @Override
+    public List<Task> getYellowPriorityTasks() {
+        List<TaskEntity> taskEntities = mTasksDao.getAllTasks();
+        List<Task> resultList = new ArrayList<>();
+
+        for (TaskEntity taskEntity: taskEntities) {
+            if (Converter.convert(taskEntity).getPriority()
+                    .equals(String.valueOf(TaskPriorityValue.YELLOW))) {
+                resultList.add(Converter.convert(taskEntity));
+            }
+        }
+        return resultList;
+    }
+
 
     @Override
     public Task getTaskById(UUID uuid) {

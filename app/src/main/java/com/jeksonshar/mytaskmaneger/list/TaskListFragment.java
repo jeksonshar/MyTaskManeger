@@ -7,7 +7,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +23,10 @@ import com.jeksonshar.mytaskmaneger.details.TaskDetailsFragment;
 import com.jeksonshar.mytaskmaneger.model.Task;
 import com.jeksonshar.mytaskmaneger.repository.Repository;
 import com.jeksonshar.mytaskmaneger.repository.RepositoryProvider;
+import com.jeksonshar.mytaskmaneger.repository.room.Converter;
+import com.jeksonshar.mytaskmaneger.repository.room.TaskEntity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,11 +35,16 @@ public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private TaskListAdapter mTaskListAdapter;
     private ImageButton addTask;
+    private Button allTasksPriority;
+    private ImageButton redTasksPriority;
+    private ImageButton greenTasksPriority;
+    private ImageButton yellowTasksPriority;
 
     private Repository mRepository;
 
     private static boolean hiding;
     private static boolean sortByDeadline;
+    private static String listPriority  = String.valueOf(TaskListPriorityChoose.ALL_TASKS);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +52,7 @@ public class TaskListFragment extends Fragment {
         setHasOptionsMenu(true);
 
         mRepository = RepositoryProvider.getInstance(getContext());
+//        listPriority = String.valueOf(TaskListPriorityChoose.ALL_TASKS);
     }
 
     @Nullable
@@ -58,6 +69,11 @@ public class TaskListFragment extends Fragment {
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
         addTask = view.findViewById(R.id.imageButton);
+
+        allTasksPriority = view.findViewById(R.id.all_tasks_priority);
+        redTasksPriority = view.findViewById(R.id.red_tasks_priority);
+        greenTasksPriority = view.findViewById(R.id.green_tasks_priority);
+        yellowTasksPriority = view.findViewById(R.id.yellow_tasks_priority);
     }
 
     @Override
@@ -67,23 +83,89 @@ public class TaskListFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         List<Task> taskList;
-        if (getHiding()) {
-            taskList = mRepository.getUnsolvedTasks();
-            if (getSortByDeadline()) {
-                Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
-                mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+        if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.RED_TASKS))) {
+            taskList = mRepository.getRedPriorityTasks();
+            if (getHiding()) {
+                taskList = getUnsolvedTasksThere(taskList);
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
             } else {
-                Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
-                mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                taskList = mRepository.getRedPriorityTasks();
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
             }
-        } else {
-            taskList = mRepository.getAllTasks();
-            if (getSortByDeadline()) {
-                Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
-                mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+        } else if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.GREEN_TASKS))) {
+            taskList = mRepository.getGreenPriorityTasks();
+            if (getHiding()) {
+                taskList = getUnsolvedTasksThere(taskList);
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
             } else {
-                Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
-                mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                taskList = mRepository.getGreenPriorityTasks();
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
+            }
+        } else if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.YELLOW_TASKS))) {
+            taskList = mRepository.getYellowPriorityTasks();
+            if (getHiding()) {
+                taskList = getUnsolvedTasksThere(taskList);
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
+            } else {
+                taskList = mRepository.getYellowPriorityTasks();
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
+            }
+        } else if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.ALL_TASKS))) {
+            taskList = mRepository.getAllTasks();
+            if (getHiding()) {
+                taskList = getUnsolvedTasksThere(taskList);
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
+            } else {
+                taskList = mRepository.getAllTasks();
+                if (getSortByDeadline()) {
+                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                    mTaskListAdapter = new TaskListAdapter(taskList,mItemEventsListener);
+                } else {
+                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                    mTaskListAdapter = new TaskListAdapter(taskList, mItemEventsListener);
+                }
             }
         }
 
@@ -101,6 +183,64 @@ public class TaskListFragment extends Fragment {
                 }
             }
         });
+
+        allTasksPriority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.all_tasks_priority) {
+                    setChooseOfPriorityTasks(String.valueOf(TaskListPriorityChoose.ALL_TASKS));
+                    onActivityCreated(getArguments());
+                }
+            }
+        });
+
+        redTasksPriority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.red_tasks_priority) {
+                    setChooseOfPriorityTasks(String.valueOf(TaskListPriorityChoose.RED_TASKS));
+                    onActivityCreated(getArguments());
+                }
+            }
+        });
+
+        greenTasksPriority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.green_tasks_priority) {
+                    setChooseOfPriorityTasks(String.valueOf(TaskListPriorityChoose.GREEN_TASKS));
+                    onActivityCreated(getArguments());
+                }
+            }
+        });
+
+        yellowTasksPriority.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.yellow_tasks_priority) {
+                    setChooseOfPriorityTasks(String.valueOf(TaskListPriorityChoose.YELLOW_TASKS));
+                    onActivityCreated(getArguments());
+                }
+            }
+        });
+    }
+
+    private List<Task> getUnsolvedTasksThere(List<Task> taskList) {
+        List<Task> resultList = new ArrayList<>();
+        for (Task task: taskList) {
+            if (!task.getSolved()) {
+                resultList.add(task);
+            }
+        }
+        return resultList;
+    }
+
+    private void setChooseOfPriorityTasks(String tasksPriority) {
+        listPriority = tasksPriority;
+    }
+
+    private String getChooseOfPriorityTasks() {
+        return listPriority;
     }
 
     @Override
@@ -157,24 +297,90 @@ public class TaskListFragment extends Fragment {
     private final Repository.Listener repositoryListener = new Repository.Listener() {
         @Override
         public void onDataChanged() {
+
             List<Task> taskList;
-            if (getHiding()) {
-                taskList = mRepository.getUnsolvedTasks();
-                if (getSortByDeadline()) {
-                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
-                    mTaskListAdapter.setNewTasks(taskList);
+            if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.RED_TASKS))) {
+                taskList = mRepository.getRedPriorityTasks();
+                if (getHiding()) {
+                    taskList = getUnsolvedTasksThere(taskList);
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
                 } else {
-                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
-                    mTaskListAdapter.setNewTasks(taskList);
+                    taskList = mRepository.getRedPriorityTasks();
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
                 }
-            } else {
-                taskList = mRepository.getAllTasks();
-                if (getSortByDeadline()) {
-                    Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
-                    mTaskListAdapter.setNewTasks(taskList);
+            } else if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.GREEN_TASKS))) {
+                taskList = mRepository.getGreenPriorityTasks();
+                if (getHiding()) {
+                    taskList = getUnsolvedTasksThere(taskList);
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
                 } else {
-                    Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
-                    mTaskListAdapter.setNewTasks(taskList);
+                    taskList = mRepository.getGreenPriorityTasks();
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
+                }
+            } else if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.YELLOW_TASKS))) {
+                taskList = mRepository.getYellowPriorityTasks();
+                if (getHiding()) {
+                    taskList = getUnsolvedTasksThere(taskList);
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
+                } else {
+                    taskList = mRepository.getYellowPriorityTasks();
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
+                }
+            } else if (getChooseOfPriorityTasks().equals(String.valueOf(TaskListPriorityChoose.ALL_TASKS))) {
+                if (getHiding()) {
+                    taskList = mRepository.getUnsolvedTasks();
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
+                } else {
+                    taskList = mRepository.getAllTasks();
+                    if (getSortByDeadline()) {
+                        Collections.sort(taskList, Task.COMPARE_BY_DEADLINE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    } else {
+                        Collections.sort(taskList, Task.COMPARE_BY_CREATED_DATE);
+                        mTaskListAdapter.setNewTasks(taskList);
+                    }
                 }
             }
         }

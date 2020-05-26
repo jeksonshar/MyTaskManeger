@@ -21,6 +21,21 @@ public class InMemoryRepository extends BaseRepository {
     }
 
     @Override
+    public List<Task> getRedPriorityTasks() {
+        return mTaskList;
+    }
+
+    @Override
+    public List<Task> getGreenPriorityTasks() {
+        return mTaskList;
+    }
+
+    @Override
+    public List<Task> getYellowPriorityTasks() {
+        return mTaskList;
+    }
+
+    @Override
     public Task getTaskById(UUID uuid) {
         for (Task task: mTaskList) {
             if (task.getId().equals(uuid)) {
