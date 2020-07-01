@@ -2,9 +2,15 @@ package com.jeksonshar.mytaskmaneger.details;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +27,8 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.fragment.app.Fragment;
 
 import com.jeksonshar.mytaskmaneger.R;
@@ -98,13 +106,7 @@ public class TaskDetailsFragment extends Fragment {
         titleView.setText(mTask.getTitle());
         detailView.setText(mTask.getDetail());
 
-        if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.GREEN))) {
-            taskPriority.setImageResource(R.drawable.ic_brightness_green_24dp);
-        } else if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.RED))) {
-            taskPriority.setImageResource(R.drawable.ic_brightness_red_24dp);
-        } else if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.YELLOW))) {
-            taskPriority.setImageResource(R.drawable.ic_brightness_yellow_24dp);
-        }
+        setPriorityValue();
 
         setInitialDateTime();
 
@@ -193,9 +195,20 @@ public class TaskDetailsFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requireActivity().onBackPressed();
+//                requireActivity().onBackPressed();  // bad method
+                getParentFragmentManager().popBackStack();
             }
         });
+    }
+
+    public void setPriorityValue() {
+        if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.GREEN))) {
+            taskPriority.setImageResource(R.drawable.ic_brightness_green_24dp);
+        } else if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.RED))) {
+            taskPriority.setImageResource(R.drawable.ic_brightness_red_24dp);
+        } else if (mTask.getPriority().equals(String.valueOf(TaskPriorityValue.YELLOW))) {
+            taskPriority.setImageResource(R.drawable.ic_brightness_yellow_24dp);
+        }
     }
 
     @Override
@@ -207,11 +220,59 @@ public class TaskDetailsFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.delete) {
             mRepository.delete(mRepository.getTaskById(taskId));
-            requireActivity().onBackPressed();
+//            requireActivity().onBackPressed();  // bad method
+            getParentFragmentManager().popBackStack();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Moves icons from the PopupMenu MenuItems' icon fields into the menu title as a Spannable with the icon and title text.
+     */
+    public static void insertMenuItemIcons(Context context, PopupMenu popupMenu) {
+        Menu menu = popupMenu.getMenu();
+        if (hasIcon(menu)) {
+            for (int i = 0; i < menu.size(); i++) {
+                insertMenuItemIcon(context, menu.getItem(i), menu);
+            }
+        }
+    }
+
+    /**
+     * @return true if the menu has at least one MenuItem with an icon.
+     */
+    private static boolean hasIcon(Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getIcon() != null) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Converts the given MenuItem title into a Spannable containing both its icon and title.
+     */
+    private static void insertMenuItemIcon(Context context, MenuItem menuItem, Menu menu) {
+        Drawable icon = menuItem.getIcon();
+
+        // If there no icon, we insert a transparent one to keep the title aligned with the items
+        // which do have icons.
+        if (icon == null) icon = new ColorDrawable(Color.TRANSPARENT);
+
+        int iconSize = context.getResources().getDimensionPixelSize(R.dimen.menu_priority_menu);
+        icon.setBounds(0, 0, iconSize, iconSize);
+        ImageSpan imageSpan = new ImageSpan(icon);
+
+        // Add a space placeholder for the icon, before the title.
+        SpannableStringBuilder ssb = new SpannableStringBuilder("     " + menuItem.getTitle());
+
+        // Replace the space placeholder with the icon.
+        ssb.setSpan(imageSpan, 0, 1, 0);
+        menuItem.setTitle(ssb);
+        // Set the icon to null just in case, on some weird devices, they've customized Android to display
+        // the icon in the menu... we don't want two icons to appear.
+        menuItem.setIcon(null);
     }
 
     public void showPopUpMenu(View v) {
@@ -225,7 +286,7 @@ public class TaskDetailsFragment extends Fragment {
                         case R.id.green_priority:
                             mTask.setPriority(String.valueOf(TaskPriorityValue.GREEN));
                             saveTask();
-                            onActivityCreated(getArguments());
+                            setPriorityValue();
                             return true;
                         case R.id.red_priority:
                             mTask.setPriority(String.valueOf(TaskPriorityValue.RED));
@@ -242,6 +303,7 @@ public class TaskDetailsFragment extends Fragment {
                    return false;
                 }
             });
+        insertMenuItemIcons(getContext(), popupMenu);
             popupMenu.show();
     }
 
